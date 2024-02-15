@@ -23,7 +23,7 @@ env/
 # Miscellaneous
 *.DS_Store
 Thumbs.db
-
-.txt
 files/api.txt
+plugins/
 .DS_Store
+.txt

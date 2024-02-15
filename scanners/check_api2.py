@@ -7,6 +7,7 @@ def is_valid_url(url):
   return parsed_url.scheme in ['http', 'https'] and parsed_url.netloc != ''
 
 def check_api2_broken_authentication(endpoint, token=None):
+  vulnerabilities = []
   if not is_valid_url(endpoint):
     print(f"Invalid URL: {endpoint}")
     return
