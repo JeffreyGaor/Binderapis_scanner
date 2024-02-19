@@ -1,38 +1,37 @@
 import json
-import requests
-from urllib.parse import urlparse
+from utils.url_validator import is_valid_url
+from utils.req_methods import req_methods
 
-def is_valid_url(url):
-  parsed_url = urlparse(url)
-  return parsed_url.scheme in ['http', 'https'] and parsed_url.netloc != ''
-
-def check_api3_broken_object_property_level_authorization(endpoint, token=None):
-  headers = {'Authorization': f'Bearer {token}'} if token else {}
+#API3:2023 - Broken Object Property Level Authorization
+def check_api_3(endpoint, method='GET', token=None):
+  vulnerabilities = []
   if not is_valid_url(endpoint):
-    print(f"Invalid URL: {endpoint}")
-    return
+    print(f'Invalid URL: {endpoint}')
+    return 'Invalid URL'
   
   malicious_payload  = {
     'item': 'this is a payload implant',
   }
 
-
-  response = requests.get(endpoint, headers=headers)
-  if response.status_code == 200:
+  response = req_methods(endpoint, method, token)
+  if response.status_code // 100 == 2:
     try:
       json_data = response.json()
-      json_data.update(malicious_payload)
-      
+      if isinstance(json_data, dict) and malicious_payload:
+        json_data.update(malicious_payload)
+      else:
+        json_data = malicious_payload
+
     except json.JSONDecodeError:
-      print('Error decoding JSON response.')
-    
-    modified_response = requests.post(endpoint, json=json_data, headers=headers)
-    if modified_response.status_code == 200:
-      print('Broken Object Property Level Authorization Detected')
+      print('API 3: Error decoding JSON response.')
+    modified_response = req_methods(endpoint, method, token, json_data)
+    if modified_response.status_code // 100 == 2:
+      message = 'Broken Object Property Level Authorization Detected'
+      print('API 3: ' + message)
+      vulnerabilities.append(message)
     else:
-      print('Endpoint processed the modified payload, but did not detect the broken object property level')
+      print('API 3: Endpoint processed the modified payload, but did not detect the broken object property level')
   else:
-    print(f"Error accessing API at {endpoint}. Status code: {response.status_code}")
-    return
-
-
+    print(f"API 3: Error accessing API at {endpoint}. Status code: {response.status_code}")
+    
+  return vulnerabilities
