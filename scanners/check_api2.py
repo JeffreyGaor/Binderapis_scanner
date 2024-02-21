@@ -2,30 +2,30 @@ import json
 from utils.url_validator import is_valid_url
 from utils.req_methods import req_methods
 
-def check_invalid_url(endpoint):
+def check_invalid_url(endpoint, logs):
   if not is_valid_url(endpoint):
-      print(f'Invalid URL: {endpoint}')
-      return ['Invalid URL']
+    logs.append(f'Invalid URL: {endpoint}')
+    return ['Invalid URL']
   return []
 
-def check_token_issues(response):
+def check_token_issues(response, logs):
   vulnerabilities = []
   try:
     json_data = response.json()
     if 'error' in json_data:
       if json_data['error'] == 'Invalid Token':
         message = 'Broken Authentication Detected - Invalid Token'
-        print('API 2: ' + message)
+        logs.append('API 2: ' + message)
         vulnerabilities.append(message)
     elif 'expiration' not in json_data:
       message = 'Broken Authentication Detected - Token Expiration Missing'
-      print('API 2: ' + message)
+      logs.append('API 2: ' + message)
       vulnerabilities.append(message)
   except json.JSONDecodeError:
-    print('API 2: Error decoding JSON response.')
+    logs.append('API 2: Error decoding JSON response.')
   return vulnerabilities
 
-def perform_sql_injection(endpoint, method, token):
+def perform_sql_injection(endpoint, method, token, logs):
   vulnerabilities = []
   max_attempts = 10
   payload = {
@@ -39,49 +39,53 @@ def perform_sql_injection(endpoint, method, token):
     if response.status_code // 100 == 2:
       try:
           json_data = response.json()
-          print(json.dumps(json_data, indent=2))  
+          logs.append(json.dumps(json_data, indent=2))  
           message = 'Broken Authentication Detected - SQL Injectable'
-          print('API 2: ' + message)
+          logs.append('API 2: ' + message)
           vulnerabilities.append(message)
           break
       except json.JSONDecodeError:
-          print('Error decoding JSON response.')
+          logs.append('Error decoding JSON response.')
     elif response.status_code == 401:
-      print(f'Unauthorized Access - Attempt {attempt} of {max_attempts}')
+      logs.append(f'Unauthorized Access - Attempt {attempt} of {max_attempts}')
       if attempt == max_attempts:
         message = 'Broken Authentication Detected - Lockdown Missing'
-        print('API 2: ' + message)
+        logs.append('API 2: ' + message)
         vulnerabilities.append(message)
         break
     elif response.status_code == 403:
       try:
         json_data = response.json()
         if json_data.get('status') in ['locked', 'blocked']:
-            print("API 2: Authentication is locked or blocked. Exiting.")
+            logs.append("API 2: Authentication is locked or blocked. Exiting.")
             break
       except json.JSONDecodeError:
-        print('API 2: Error decoding JSON response.')
+        logs.append('API 2: Error decoding JSON response.')
     else:
-      print(f'API 2: Error accessing API at {endpoint} Status code: {response.status_code}')
+      logs.append(f'API 2: Error accessing API at {endpoint} Status code: {response.status_code}')
   
   return vulnerabilities
 
 def check_api_2(endpoint, method='GET', token=None):
   vulnerabilities = []
-  vulnerabilities.extend(check_invalid_url(endpoint))
+  logs = []
+  vulnerabilities.extend(check_invalid_url(endpoint, logs))
 
   if token:
     response = req_methods(endpoint, method, token)
     if response.status_code // 100 == 2:
-      vulnerabilities.extend(check_token_issues(response))
+      vulnerabilities.extend(check_token_issues(response, logs))
     if response.status_code // 100 == 4:
       if 'auth' in endpoint or 'login' in endpoint:
-        vulnerabilities.extend(perform_sql_injection(endpoint, method, token))
+        vulnerabilities.extend(perform_sql_injection(endpoint, method, token, logs))
       else:
-        print(f'API 2: Not a Login/Auth Endpoint, Status code: {response.status_code}')
+        logs.append(f'API 2: Not a Login/Auth Endpoint, Status code: {response.status_code}')
     else:
-      print(f'API 2: Error accessing API at {endpoint} Status code: {response.status_code}')
+      logs.append(f'API 2: Error accessing API at {endpoint} Status code: {response.status_code}')
   else:
-    vulnerabilities.extend(perform_sql_injection(endpoint, method, token))
-  
+    vulnerabilities.extend(perform_sql_injection(endpoint, method, token, logs))
+
+  for log in logs:
+    print(log)
+
   return vulnerabilities

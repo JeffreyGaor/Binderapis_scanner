@@ -13,5 +13,4 @@ def check_api_7(endpoint, method='GET', token=None):
   if response.status_code == 500:
     print(f"Error accessing API at {endpoint}. Status code: {response.status_code}")
     
-  vulnerabilities.append('this is a test')
   return vulnerabilities

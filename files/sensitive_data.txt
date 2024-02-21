@@ -16,6 +16,7 @@ pin
 passport_number
 driver_license
 date_of_birth
+birthday
 mother_maiden_name
 biometric_data
 health_record
@@ -24,4 +25,3 @@ confidential
 confidential_info
 proprietary
 proprietary_info3
-birthday

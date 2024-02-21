@@ -10,8 +10,5 @@ def check_api_5(endpoint, method='GET', token=None):
     return 'Invalid URL'
   
   response = req_methods(endpoint, method, token)
-  if response.status_code == 500:
-    print(f"Error accessing API at {endpoint}. Status code: {response.status_code}")
     
-  vulnerabilities.append('this is a test')
   return vulnerabilities

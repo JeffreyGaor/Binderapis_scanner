@@ -60,7 +60,7 @@ def process_endpoint(endpoint_details):
     return []
 
   vulnerabilities = []
-  for check_func in [check_api_1, check_api_2, check_api_3, check_api_4, check_api_6, check_api_9, check_api_10]:
+  for check_func in [check_api_1, check_api_2, check_api_3, check_api_4, check_api_5, check_api_6, check_api_7, check_api_8, check_api_9, check_api_10]:
     vulnerabilities.extend(check_func(endpoint, method, token))
   return vulnerabilities
 
