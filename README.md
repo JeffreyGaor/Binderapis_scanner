@@ -1,43 +1,90 @@
 # Binderlabs API Security Simulator (BASS-Env)
 
-Binderlabs API Security Simulator (BASS-Env) is a vulnerable API environment that is susceptible to the OWASP Top 10 API Security Risk – 2023. The environment was deliberately designed with API flaws and as a practice ground for cybersecurity professionals who wishes to hands-on their API hacking skills and enhance their knowledge in API Security testing domain.
+Binderlabs API Security Simulator (**BASS-Env**) is a deliberately vulnerable API environment designed to be susceptible to the **OWASP Top 10 API Security Risks – 2023**. It serves as a practice ground for cybersecurity professionals to enhance their **API hacking skills** and deepen their knowledge in **API security testing**.
 
+## Installation
 
-# Install 
-	PHP
-	MySQL
-	Postman Client
+### Prerequisites
 
+Ensure you have the following installed on your system:
+
+- **PHP**
+- **MySQL**
+- **Postman Client**
+
+### Setup Instructions
+
+#### 1. Clone the repository:
+
+```sh
 git clone https://github.com/JeffreyGaor/Binderapis_scanner.git
 cd Binderapis_scanner
+```
 
-# Login into MySQL and create the database
+#### 2. Create MySQL Database:
+
+Login into MySQL and create the required database:
+
+```sh
 mysql -u root -p -e "CREATE DATABASE bass;"
+```
 
-#Import mysql database
+#### 3. Import the Database:
 
-#cd BASS/database
+```sh
+cd BASS/database
 mysql -u [username] -p [database_name] < bass.sql
-Start PHP Server (laravel)
+```
 
+#### 4. Start the PHP Server (Laravel):
+
+```sh
 cd BASS/BASS_Env
 php artisan serve --host={{hostip}} --port=8000
+```
 
-Binderlabs API Security Scanner (BASS-Scanner)
-Binderlabs API Security Simulator (BASS-Scanner) is design to aid cyber security professionals in API Security Testing. BASS-Scanner will identify security flaws pertaining to OWASP Top 10 API Security and more. It will also significantly reduce testing time for security professionals such as a Penetration tester during an API Pentest engagement.
+---
 
-# Requirements
-Install the dependencies with:
+# Binderlabs API Security Scanner (BASS-Scanner)
+
+**BASS-Scanner** is a tool designed to aid cybersecurity professionals in **API security testing**. It automates the identification of security flaws, particularly those related to the **OWASP Top 10 API Security Risks**, reducing the time required for penetration testing engagements.
+
+## Requirements
+
+### Install the dependencies with:
+
+```sh
 git clone https://github.com/JeffreyGaor/Binderapis_scanner.git
 cd BASS/BASS_Scanner
 pip3 install -r requirements.txt
-Chrome browser to detect SSRF attacks.
-Features
-Fuzz Testing:
-Dynamic Fuzzing: Automatically generate and send a variety of malformed and unexpected data to API endpoints to identify vulnerabilities and unexpected behavior.
-Security Risk Detection:
-OWASP Top 10 Coverage: Perform automated scans to detect and report on security issues outlined in the OWASP Top 10 API Security Risks.
-Injection Detection: Identify and report on potential injection vulnerabilities such as SQL injection, NoSQL injection, and command injection.
-Authentication and Authorization Testing:
-Token Analysis: Evaluate the strength of authentication tokens and identify potential weaknesses in token handling mechanisms.
-Access Control Checks: Analyze API endpoints to ensure proper access controls are in place, preventing unauthorized access.
+```
+
+- **Chrome Browser** (for detecting SSRF attacks)
+
+---
+
+## Features
+
+### 🔍 **Fuzz Testing**
+
+- **Dynamic Fuzzing**: Automatically generates and sends a variety of malformed and unexpected data to API endpoints to identify vulnerabilities and unexpected behavior.
+
+### 🛡 **Security Risk Detection**
+
+- **OWASP Top 10 Coverage**: Performs automated scans to detect and report on security issues outlined in the OWASP Top 10 API Security Risks.
+- **Injection Detection**: Identifies potential vulnerabilities such as **SQL injection, NoSQL injection, and command injection**.
+
+### 🔑 **Authentication & Authorization Testing**
+
+- **Token Analysis**: Evaluates the strength of authentication tokens and identifies potential weaknesses in token handling mechanisms.
+- **Access Control Checks**: Analyzes API endpoints to ensure proper access controls are in place, preventing unauthorized access.
+
+---
+
+## 🚧 Usage
+
+Under construction…
+
+---
+
+## 📚 References
