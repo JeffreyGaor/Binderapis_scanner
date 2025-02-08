@@ -1,15 +1,16 @@
 Binderlabs API Security Simulator (BASS-Env) is a vulnerable API environment that is susceptible to the OWASP Top 10 API Security Risk – 2023. The environment was deliberately designed with API flaws and as a practice ground for cybersecurity professionals who wishes to hands-on their API hacking skills and enhance their knowledge in API Security testing domain.
 
-Install
-PHP
-Mysql
-Postman Client
-git clone https://github.com/binderlabs/BASS.git
-Login into mysql and create db name "bass"
 
-Import mysql database
+# Install PHP, MySQL, Postman Client
+git clone https://github.com/JeffreyGaor/Binderapis_scanner.git
+cd Binderapis_scanner
 
-cd BASS/database
+# Login into MySQL and create the database
+mysql -u root -p -e "CREATE DATABASE bass;"
+
+#Import mysql database
+
+#cd BASS/database
 mysql -u [username] -p [database_name] < bass.sql
 Start PHP Server (laravel)
 
@@ -19,9 +20,9 @@ php artisan serve --host={{hostip}} --port=8000
 Binderlabs API Security Scanner (BASS-Scanner)
 Binderlabs API Security Simulator (BASS-Scanner) is design to aid cyber security professionals in API Security Testing. BASS-Scanner will identify security flaws pertaining to OWASP Top 10 API Security and more. It will also significantly reduce testing time for security professionals such as a Penetration tester during an API Pentest engagement.
 
-Requirements
+# Requirements
 Install the dependencies with:
-git clone https://github.com/binderlabs/BASS.git
+git clone https://github.com/JeffreyGaor/Binderapis_scanner.git
 cd BASS/BASS_Scanner
 pip3 install -r requirements.txt
 Chrome browser to detect SSRF attacks.
